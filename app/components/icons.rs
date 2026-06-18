@@ -3,6 +3,7 @@ use dioxus::prelude::*;
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum IconKind {
     ArrowLeft,
+    Folder,
     Home,
     Link,
     Mic,
@@ -28,6 +29,18 @@ pub fn Icon(kind: IconKind) -> Element {
                 stroke_linejoin: "round",
                 path { d: "M19 12H5" }
                 path { d: "M12 19l-7-7 7-7" }
+            }
+        },
+        IconKind::Folder => rsx! {
+            svg {
+                class: "ui-icon",
+                view_box: "0 0 24 24",
+                fill: "none",
+                stroke: "currentColor",
+                stroke_width: "1.8",
+                stroke_linecap: "round",
+                stroke_linejoin: "round",
+                path { d: "M3 7.5A2.5 2.5 0 0 1 5.5 5H9l2 2h7.5A2.5 2.5 0 0 1 21 9.5v7A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5Z" }
             }
         },
         IconKind::Home => rsx! {

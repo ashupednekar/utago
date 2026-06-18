@@ -2,6 +2,7 @@
 pub enum SongSource {
     SpotifyLink(String),
     LocalDiscovery,
+    LocalDirectory(String),
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -34,6 +35,18 @@ impl SongDraft {
         }
     }
 
+    pub fn local_directory(path: impl Into<String>, description: impl Into<String>) -> Self {
+        let path = path.into();
+
+        Self {
+            title: "Local directory import".to_string(),
+            artist: "Bulk local library".to_string(),
+            description: description.into(),
+            lyrics: String::new(),
+            source: SongSource::LocalDirectory(path),
+        }
+    }
+
     pub fn staging_label(&self) -> String {
         match &self.source {
             SongSource::SpotifyLink(link) if link.trim().is_empty() => {
@@ -41,6 +54,10 @@ impl SongDraft {
             }
             SongSource::SpotifyLink(_) => "Spotify draft staged".to_string(),
             SongSource::LocalDiscovery => "Local discovery draft staged for AI fill".to_string(),
+            SongSource::LocalDirectory(path) if path.trim().is_empty() => {
+                "Directory import staged without a path".to_string()
+            }
+            SongSource::LocalDirectory(_) => "Directory import queued".to_string(),
         }
     }
 }

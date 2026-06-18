@@ -1,7 +1,7 @@
 [workspace]
 members = [
     "app",
-    "audio",
+    "audio", "common",
     "inference",
     "library",
     "search",

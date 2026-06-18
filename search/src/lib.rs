@@ -32,6 +32,10 @@ pub fn draft_local_song(description: impl Into<String>, lyrics: impl Into<String
     SongDraft::local_discovery(description, lyrics)
 }
 
+pub fn draft_local_directory(path: impl Into<String>, description: impl Into<String>) -> SongDraft {
+    SongDraft::local_directory(path, description)
+}
+
 pub fn library_preview() -> Vec<LibrarySong> {
     library::featured_songs()
 }

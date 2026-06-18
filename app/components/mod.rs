@@ -3,6 +3,7 @@ use dioxus::prelude::*;
 pub mod add_song;
 mod home;
 mod icons;
+mod library_browser;
 mod mascot;
 
 #[derive(Debug, Clone, Routable, PartialEq)]
@@ -10,6 +11,8 @@ mod mascot;
 pub enum Route {
     #[route("/")]
     Home {},
+    #[route("/library")]
+    BrowseLibrary {},
     #[route("/add")]
     AddSong {},
     #[route("/add/local")]
@@ -20,6 +23,13 @@ pub enum Route {
 pub fn Home() -> Element {
     rsx! {
         home::HomeScreen {}
+    }
+}
+
+#[component]
+pub fn BrowseLibrary() -> Element {
+    rsx! {
+        library_browser::LibraryScreen {}
     }
 }
 

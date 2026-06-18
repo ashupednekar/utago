@@ -7,6 +7,9 @@
     --utago-line: #2a2a27;
     --utago-strong-line: #3f3f39;
     --utago-orange: #ff6a1a;
+    --page-gutter: clamp(16px, 4vw, 44px);
+    --content-max: 1180px;
+    --compact-max: 760px;
 }
 
 * {
@@ -22,10 +25,11 @@ body {
     min-width: 320px;
     margin: 0;
     background:
-        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 220px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.026) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
         var(--utago-black);
-    background-size: 28px 28px;
+    background-size: auto, 32px 32px, 32px 32px;
     color: var(--utago-paper);
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -83,10 +87,10 @@ textarea {
 .utago-app {
     position: relative;
     width: 100%;
-    max-width: 520px;
+    max-width: none;
     min-height: 100dvh;
-    margin: 0 auto;
-    padding: 16px 16px 28px;
+    margin: 0;
+    padding: 0;
     overflow-x: hidden;
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 180px),
@@ -99,15 +103,30 @@ textarea {
     justify-content: space-between;
     gap: 12px;
     min-height: 48px;
+    min-width: 0;
+    width: min(100%, var(--content-max));
+    margin: 0 auto;
+    padding: max(14px, env(safe-area-inset-top)) var(--page-gutter) 0;
+}
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 10px;
+    min-width: 0;
+    max-width: 100%;
 }
 
 .mascot-pill,
 .back-button,
 .icon-button,
+.topbar-link,
 .quick-action,
 .entry-tab,
 .primary-action,
-.ghost-action {
+.ghost-action,
+.text-action {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -130,7 +149,8 @@ textarea {
 
 .mascot-image {
     object-fit: cover;
-    filter: grayscale(1) contrast(1.18) brightness(0.92);
+    opacity: 0.82;
+    filter: grayscale(1) contrast(1.35) brightness(1.9);
     mix-blend-mode: screen;
 }
 
@@ -144,6 +164,14 @@ textarea {
 .icon-button {
     width: 44px;
     padding: 0;
+}
+
+.topbar-link,
+.text-action {
+    padding: 0 12px;
+    font-size: 0.88rem;
+    font-weight: 850;
+    white-space: nowrap;
 }
 
 .ui-icon {
@@ -328,6 +356,7 @@ textarea {
 
 .quick-actions,
 .entry-tabs,
+.local-mode-tabs,
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -337,7 +366,8 @@ textarea {
 .quick-action,
 .entry-tab,
 .primary-action,
-.ghost-action {
+.ghost-action,
+.text-action {
     min-width: 0;
     padding: 0 12px;
     font-size: 0.92rem;
@@ -353,7 +383,8 @@ textarea {
 
 .listening-deck,
 .karaoke-stage,
-.song-form {
+.song-form,
+.browse-panel {
     margin-top: 18px;
     border: 1px solid var(--utago-line);
     border-radius: 8px;
@@ -473,6 +504,18 @@ textarea {
     gap: 8px;
 }
 
+.section-heading--split {
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.section-heading__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
 .section-heading h2 {
     margin: 0;
     font-size: 1rem;
@@ -537,10 +580,98 @@ textarea {
     font-weight: 850;
 }
 
+.home-layout,
+.home-main,
+.home-side {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.home-layout {
+    display: grid;
+    gap: 18px;
+    width: min(100%, var(--content-max));
+    margin: 0 auto;
+    padding: 20px var(--page-gutter) 32px;
+}
+
+.browse-panel {
+    display: grid;
+    gap: 12px;
+    padding: 14px;
+    min-width: 0;
+}
+
+.browse-panel--compact {
+    margin-top: 0;
+}
+
+.browse-search {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    align-items: center;
+    gap: 8px;
+    min-height: 48px;
+    border: 1px solid var(--utago-line);
+    border-radius: 8px;
+    padding: 0 12px;
+    background: #0b0b0a;
+}
+
+.browse-search input {
+    min-height: 44px;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.browse-search input:focus {
+    box-shadow: none;
+}
+
+.browse-list {
+    display: grid;
+    gap: 10px;
+}
+
+.browse-empty {
+    display: grid;
+    place-items: center;
+    gap: 8px;
+    min-height: 120px;
+    border: 1px dashed var(--utago-line);
+    border-radius: 8px;
+    color: var(--utago-muted);
+    text-align: center;
+}
+
+.browse-empty p {
+    margin: 0;
+}
+
+.song-row--browse {
+    min-height: 62px;
+}
+
 .add-song-app {
     display: grid;
     align-content: start;
     gap: 18px;
+}
+
+.add-song-app > .add-hero,
+.add-song-app > .entry-tabs,
+.add-song-app > .song-form,
+.browse-app > .add-hero,
+.browse-app > .browse-panel {
+    width: calc(100% - var(--page-gutter) - var(--page-gutter));
+    max-width: var(--compact-max);
+    margin-inline: auto;
+}
+
+.browse-app > .browse-panel {
+    max-width: 1040px;
 }
 
 .back-button {
@@ -579,6 +710,16 @@ textarea {
 .field-block textarea {
     min-height: 48px;
     padding: 12px;
+}
+
+.local-mode-tabs {
+    margin-bottom: 2px;
+}
+
+.directory-note {
+    margin: -4px 0 0;
+    color: var(--utago-muted);
+    font-size: 0.88rem;
 }
 
 .primary-action {
@@ -633,18 +774,6 @@ textarea {
     }
 }
 
-@media (min-width: 720px) {
-    body {
-        display: grid;
-        place-items: start center;
-    }
-
-    .utago-app {
-        min-height: 100vh;
-        border-inline: 1px solid var(--utago-line);
-    }
-}
-
 @media (max-width: 360px) {
     .hero-copy h1,
     .add-hero h1 {
@@ -653,8 +782,144 @@ textarea {
 
     .quick-actions,
     .entry-tabs,
+    .local-mode-tabs,
     .form-row,
     .discovery-rail {
         grid-template-columns: 1fr;
+    }
+
+    .topbar-link span {
+        display: none;
+    }
+}
+
+@media (min-width: 760px) {
+    .hero-copy h1,
+    .add-hero h1 {
+        font-size: 3rem;
+    }
+
+    .mascot-hero {
+        width: 238px;
+    }
+
+    .hum-button {
+        width: min(78vw, 312px);
+    }
+
+    .browse-panel:not(.browse-panel--compact) .browse-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 920px) {
+    .utago-app {
+        min-height: 100vh;
+    }
+
+    .home-layout {
+        grid-template-columns: minmax(0, 780px);
+        align-items: start;
+        justify-content: center;
+        gap: 22px;
+    }
+
+    .home-layout--matched {
+        grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+        justify-content: stretch;
+    }
+
+    .home-main {
+        display: grid;
+        gap: 16px;
+    }
+
+    .home-side {
+        position: sticky;
+        top: 22px;
+    }
+
+    .home-side .karaoke-stage {
+        margin-top: 0;
+    }
+
+    .hero-zone {
+        grid-template-columns: 238px minmax(0, 1fr);
+        grid-template-areas:
+            "mascot copy"
+            "hum hum"
+            "readout readout";
+        align-items: center;
+        gap: 18px 28px;
+        padding-block: 26px 16px;
+    }
+
+    .mascot-hero {
+        grid-area: mascot;
+        margin: 0;
+    }
+
+    .hero-copy {
+        grid-area: copy;
+        text-align: left;
+    }
+
+    .hero-copy h1 {
+        font-size: 4.2rem;
+    }
+
+    .hum-button {
+        grid-area: hum;
+        width: min(100%, 300px);
+        justify-self: center;
+    }
+
+    .capture-readout {
+        grid-area: readout;
+        justify-content: center;
+    }
+
+    .add-song-app {
+        width: min(100%, 980px);
+        margin-inline: auto;
+        padding: 0 var(--page-gutter) 32px;
+        grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+        grid-template-areas:
+            "topbar topbar"
+            "hero tabs"
+            "hero form";
+        align-items: start;
+        column-gap: 24px;
+    }
+
+    .add-song-app > .topbar {
+        grid-area: topbar;
+        width: 100%;
+        padding-inline: 0;
+    }
+
+    .add-song-app > .add-hero {
+        grid-area: hero;
+        position: sticky;
+        top: 22px;
+        width: 100%;
+        max-width: none;
+    }
+
+    .add-song-app > .entry-tabs {
+        grid-area: tabs;
+        width: 100%;
+        max-width: none;
+    }
+
+    .add-song-app > .song-form {
+        grid-area: form;
+        margin-top: 0;
+        width: 100%;
+        max-width: none;
+    }
+
+    .add-hero h1 {
+        font-size: 3.4rem;
     }
 }
