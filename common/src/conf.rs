@@ -15,7 +15,7 @@ pub struct Settings {
 impl Settings {
     pub fn new() -> Result<Settings, ConfigError> {
         Config::builder()
-            .add_source(File::new("config.toml", FileFormat::Toml))
+            .add_source(File::new("../config.toml", FileFormat::Toml))
             .build()?
             .try_deserialize()
     }

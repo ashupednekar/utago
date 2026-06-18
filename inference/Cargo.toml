@@ -9,7 +9,7 @@ anyhow = "1.0.102"
 async-trait.workspace = true
 audio = { path = "../audio" }
 common = { version = "0.1.0", path = "../common" }
-kalosm = { version = "0.4.0", features = ["language", "sound"] }
+kalosm = { version = "0.4.0", features = ["language", "metal", "sound"] }
 library = { path = "../library" }
 serde = { workspace = true, features = ["derive"] }
 tokio = { workspace = true, features = ["full"] }

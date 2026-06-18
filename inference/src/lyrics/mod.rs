@@ -19,10 +19,44 @@ impl Lyric {
             .model
             .chat()
             .with_system_prompt(common::settings.lyrics.prompt.clone());
-        let mut res = chat.add_message(format!("song: {song_name}"));
-        while let Some(token) = res.next().await {
-            tx.send(token).await?;
-        }
+        let song = format!("song: {:?}", &song_name);
+        tokio::spawn(async move {
+            let mut res = chat.add_message(song);
+            while let Some(token) = res.next().await {
+                tx.send(token).await.unwrap();
+            }
+        });
         Ok(rx)
+    }
+}
+
+mod tests {
+    use std::time::Duration;
+    use tokio::time::timeout;
+
+    #[tokio::test]
+    async fn test_get_lyrics() -> anyhow::Result<()> {
+        use crate::lyrics::Lyric;
+        let lyric = Lyric::new().await?;
+        let mut c = String::new();
+        let mut res = lyric.get("hey jude").await?;
+
+        timeout(Duration::from_secs(300), async {
+            while let Some(t) = res.recv().await {
+                if t == "\n" {
+                    println!("{:?}", &c);
+                    c.clear();
+                } else {
+                    c.push_str(&t);
+                }
+            }
+
+            if !c.is_empty() {
+                println!("{:?}", &c);
+            }
+        })
+        .await?;
+
+        Ok(())
     }
 }
